@@ -9,7 +9,7 @@ const UserEdit = ({ match, history }) => {
 
     const getUser = async () => {
         try {
-            const response = await axios.get(`http://localhost:9000/users/${userId}`);
+            const response = await axios.get(`http://localhost:5000/users/${userId}`);
             setFirstName(response.data.firstname);
             setLastName(response.data.lastname)
         } catch (error) {
@@ -28,7 +28,7 @@ const UserEdit = ({ match, history }) => {
         const data = { firstname, lastname }
 
         try {
-            const response = await axios.patch(`http://localhost:9000/users/${userId}`, data);
+            const response = await axios.patch(`http://localhost:5000/users/${userId}`, data);
             console.log("Updated Data ===>", response)
             history.push("/users");
         } catch (error) {

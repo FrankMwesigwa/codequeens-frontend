@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import  axios  from 'axios';
 import { Link } from 'react-router-dom';
+import API from '../../helpers/api';
 
 const UsersList = () => {
   const [users, setUsers] = useState([])
 
   const getUsers = async () => {
     try {
-        const response = await axios.get("http://localhost:9000/users");
+        const response = await API.get("/users");
         console.log("Users Backend ===>", response)
         setUsers(response.data);
       } catch(error) {

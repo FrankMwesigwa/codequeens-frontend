@@ -12,7 +12,7 @@ const UserAdd = ({ history }) => {
         const data = { firstname, lastname}
 
         try {
-            const response = await axios.post('http://localhost:9000/users', data);
+            const response = await axios.post('http://localhost:5000/users', data);
             console.log("Posted Data ===>", response)
             if(response.data.role ==='admin'){
                 history.push("/about");

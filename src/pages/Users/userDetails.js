@@ -11,7 +11,7 @@ const UserDetails = (props) => {
 
     const getUser = async () => {
         try {
-            const response = await axios.get(`http://localhost:9000/users/${userId}`);
+            const response = await axios.get(`http://localhost:5000/users/${userId}`);
             setUser(response.data);
         } catch (error) {
             console.log('error', error);
