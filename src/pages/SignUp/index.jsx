@@ -13,6 +13,31 @@ const Signup = () => {
   const [error, setError] = useState(false);
   const [users, setUsers] = useState([]);
 
+  const [image, setImage] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const uploadImage = () => {
+    setUploading(true);
+
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'mutuuzeApp');
+    data.append('cloud_name', 'mutuuze');
+
+    axios.post('https://api.cloudinary.com/v1_1/mutuuze/image/upload', data)
+      .then(res => {
+        console.log('Upload Image Response ====>', res);
+        setPhoto(res.data.secure_url);
+        alert('Image uploaded successfully!');
+        setUploading(false);
+      })
+      .catch(err => {
+        console.log("Image Upload Error ====>", err.message)
+        setUploading(false);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
@@ -20,9 +45,10 @@ const Signup = () => {
       lastname,
       email,
       password,
+      photo
     };
     axios
-      .post("/localhost:5000/api/post", data)
+      .post("/http://localhost:5000/auth/register", data)
       .then((res) => {
         setSuccess(true);
         console.log(res);
@@ -32,24 +58,6 @@ const Signup = () => {
         console.log(err);
       });
   };
-
-  const getUsers = () => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then((res) => {
-        console.log("Users ====>", res)
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  getUsers();
-
-  useEffect(() =>{
-    
-  })
 
   return (
     <>
@@ -66,8 +74,22 @@ const Signup = () => {
           Error Encountered while registering user
         </div>
       )}
+
       <div class="form-space">
         <h2 class="title">Sign up</h2>
+        <div>
+          {photo && (
+            <img src={photo} width="100" />
+          )}
+        </div>
+        <div class="form-group">
+          <input
+            type="file"
+            class="form-control item"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          <button onClick={uploadImage}>Upload Profile Picture</button>
+        </div>
         <form class="form" onSubmit={handleSubmit}>
           <div class="form-area">
             <div class="form-group">
