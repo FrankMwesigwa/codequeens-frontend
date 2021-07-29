@@ -1,7 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import API from '../../helpers/api';
 import './login.css';
 
 const Login = () => {
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = { email, password };
+    API.post("/auth/login", data)
+      .then((res) => {
+        console.log("Login Response Data ====>", res)
+        setSuccess(true);
+        if (res.data.token) {
+          localStorage.setItem("user", JSON.stringify(res.data));
+        }
+        setTimeout(() => {
+          setSuccess(false);
+        }, 3000)
+      })
+      .catch((err) => {
+        setError(true);
+        setTimeout(() => {
+          setError(false);
+        }, 3000)
+        console.log(err.message);
+      });
+  };
+
+  // const logout = () => {
+  //   localStorage.removeItem("user");
+  // };
+
+  // const getCurrentUser = () => {
+  //   return JSON.parse(localStorage.getItem("user"));
+  // };
+
   return (
     <>
       <div class="logo">
@@ -11,20 +49,29 @@ const Login = () => {
           width="200px"
         />
       </div>
+      {success && (
+        <div class="alert alert-success" role="alert">
+          Successfuly Logged on
+        </div>
+      )}
+      {error && (
+        <div class="alert alert-danger" role="alert">
+          Login Failed
+        </div>
+      )}
       <div class="big-one">
         <h1 class="form-title">Login</h1>
 
         <div class="container">
-          <form action="/login" class="form" id="loginform" method="POST">
+          <form class="form" onSubmit={handleSubmit}>
             <div class="form-input-group">
               <input
                 type="text"
                 class="form-input"
-                id="loginUsername"
-                name="username"
-                autofocus
-                placeholder="Username"
-                required
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div class="form-input-group">
@@ -33,9 +80,9 @@ const Login = () => {
                 class="form-input"
                 id="security"
                 name="password"
-                autofocus
                 placeholder="Password"
-                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div class="forgotpass">

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const token = window.localStorage.getItem("token");
+const user = JSON.parse(localStorage.getItem('user'));
 
 const axiosIntance = axios.create({
   baseURL: 'http://localhost:5000',
   headers: {
-    Authorization: token ? `Bearer ${token}` : "",
+    Authorization: user ? `Bearer ${user.token}` : "",
   },
 });
 
